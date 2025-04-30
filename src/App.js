@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import MessageForm from './components/MessageForm';
+import MessageDisplay from './components/MessageDisplay';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [messageData, setMessageData] = useState(null);
+
+  const handleFormSubmit = (data) => {
+    setMessageData(data);
+    localStorage.setItem('timeCapsule', JSON.stringify(data));
+  };
+
+  React.useEffect(() => {
+    const stored = localStorage.getItem('timeCapsule');
+    if (stored) {
+      setMessageData(JSON.parse(stored));
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <h1>⏳ Time Capsule Message Website</h1>
+      <MessageForm onSubmit={handleFormSubmit} />
+      <MessageDisplay messageData={messageData} />
     </div>
   );
-}
+};
 
 export default App;
